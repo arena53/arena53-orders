@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena 53 - Kitchen Display</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff9800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .ticket {
+            background: #222;
+            border: 2px solid #444;
+            border-radius: 10px;
+            padding: 15px;
+            animation: popIn 0.3s ease;
+        }
+
+        .ticket.new {
+            border-color: #00e676;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #666;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .table-num {
+            color: #ff9800;
+            font-size: 1.5rem;
+        }
+
+        .time {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .items-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+            font-size: 1.1rem;
+        }
+
+        .qty {
+            color: #00e676;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .done-btn {
+            width: 100%;
+            padding: 15px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .done-btn:hover {
+            background: #00e676;
+            color: black;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>👨‍🍳 Kitchen Orders</h1>
+    <div id="orders-container" class="ticket-grid"></div>
+
+    <audio id="dingSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // --- PASTE YOUR FIREBASE CONFIG HERE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnCmtp1s9PeEqOO3fW6n-mzrqCMFZk9to",
+            authDomain: "arena53-pos.firebaseapp.com",
+            databaseURL: "https://arena53-pos-default-rtdb.firebaseio.com",
+            projectId: "arena53-pos",
+            storageBucket: "arena53-pos.firebasestorage.app",
+            messagingSenderId: "291743234318",
+            appId: "1:291743234318:web:510b893fc6b8a64a703f5f"
+        };
+        // ---------------------------------------
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const container = document.getElementById('orders-container');
+        const ding = document.getElementById('dingSound');
+
+        // Listen for NEW orders
+        db.ref('orders').orderByChild('status').equalTo('pending').on('child_added', (snapshot) => {
+            const order = snapshot.val();
+            const key = snapshot.key;
+            createTicket(key, order);
+            ding.play().catch(e => console.log("Click page to enable audio"));
+        });
+
+        // Handle Removed/Completed orders
+        db.ref('orders').on('child_removed', (snapshot) => {
+            const el = document.getElementById(snapshot.key);
+            if (el) el.remove();
+        });
+
+        db.ref('orders').on('child_changed', (snapshot) => {
+            // If status changed to completed, remove it
+            if (snapshot.val().status === 'completed') {
+                const el = document.getElementById(snapshot.key);
+                if (el) el.remove();
+            }
+        });
+
+        function createTicket(key, order) {
+            const div = document.createElement('div');
+            div.className = 'ticket new';
+            div.id = key;
+
+            let itemsHtml = '';
+            order.items.forEach(item => {
+                itemsHtml += `<li><span class="name">${item.name}</span><span class="qty">x${item.qty}</span></li>`;
+            });
+
+            div.innerHTML = `
+                <div class="ticket-header">
+                    <span class="table-num">Table ${order.table}</span>
+                    <span class="time">${order.time}</span>
+                </div>
+                <ul class="items-list">${itemsHtml}</ul>
+                <button class="done-btn" onclick="markDone('${key}')">Mark Ready ✅</button>
+            `;
+            container.prepend(div); // Newest first
+        }
+
+        function markDone(key) {
+            // Update status in Firebase
+            db.ref('orders/' + key).update({ status: 'completed' });
+        }
+    </script>
+</body>
+
+</html>

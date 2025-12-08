@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arena 53 Go-Karting & Cafe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body data-theme="dark">
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme"
+    style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+    <svg id="sun-icon" viewBox="0 0 24 24" style="display: none;">
+      <path
+        d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.591zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.591 1.591z" />
+    </svg>
+    <svg id="moon-icon" viewBox="0 0 24 24">
+      <path fill-rule="evenodd"
+        d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"
+        clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('billing', this)">Billing</button>
+      <button class="tab-btn" onclick="switchTab('owner', this)">Owner Dashboard</button>
+    </div>
+
+    <!-- Billing Tab -->
+    <div id="billing" class="tab-content active">
+      <!-- Table Selector -->
+      <div class="table-selector" id="tableSelector">
+        <button class="table-btn active" data-table="1" onclick="selectTable(1, this)">
+          <span class="table-num">Table 1</span>
+          <span class="table-badge" id="tableBadge1"></span>
+        </button>
+        <button class="table-btn" data-table="2" onclick="selectTable(2, this)">
+          <span class="table-num">Table 2</span>
+          <span class="table-badge" id="tableBadge2"></span>
+        </button>
+        <button class="table-btn" data-table="3" onclick="selectTable(3, this)">
+          <span class="table-num">Table 3</span>
+          <span class="table-badge" id="tableBadge3"></span>
+        </button>
+        <button class="table-btn" data-table="4" onclick="selectTable(4, this)">
+          <span class="table-num">Table 4</span>
+          <span class="table-badge" id="tableBadge4"></span>
+        </button>
+        <button class="table-btn" data-table="5" onclick="selectTable(5, this)">
+          <span class="table-num">Table 5</span>
+          <span class="table-badge" id="tableBadge5"></span>
+        </button>
+        <button class="table-btn" data-table="6" onclick="selectTable(6, this)">
+          <span class="table-num">Table 6</span>
+          <span class="table-badge" id="tableBadge6"></span>
+        </button>
+      </div>
+
+      <!-- Top Bar: Customer Info -->
+      <div class="billing-top-bar">
+        <div class="top-bar-field">
+          <label for="customerName">Customer</label>
+          <input type="text" id="customerName" placeholder="Customer Name">
+        </div>
+        <div class="top-bar-field">
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+        <div class="top-bar-field">
+          <label for="paymentSelect">Payment</label>
+          <select id="paymentSelect">
+            <option value="Cash">Cash</option>
+            <option value="Online">Online</option>
+            <option value="Order">Order</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="category-tabs" id="categoryTabs">
+        <button class="cat-tab active" data-category="laps" onclick="selectCategory('laps', this)">🏎️ LAPS</button>
+        <button class="cat-tab" data-category="mojitos" onclick="selectCategory('mojitos', this)">🍹 Mojitos</button>
+        <button class="cat-tab" data-category="cold-coffee" onclick="selectCategory('cold-coffee', this)">☕ Cold
+          Coffee</button>
+        <button class="cat-tab" data-category="smoothies" onclick="selectCategory('smoothies', this)">🥤
+          Smoothies</button>
+        <button class="cat-tab" data-category="fresh-juice" onclick="selectCategory('fresh-juice', this)">🍊 Fresh
+          Juice</button>
+        <button class="cat-tab" data-category="ice-creams" onclick="selectCategory('ice-creams', this)">🍨 Ice
+          Creams</button>
+        <button class="cat-tab" data-category="barista" onclick="selectCategory('barista', this)">☕ Barista</button>
+        <button class="cat-tab" data-category="tea" onclick="selectCategory('tea', this)">🍵 Tea</button>
+        <button class="cat-tab" data-category="desserts" onclick="selectCategory('desserts', this)">� Desserts</button>
+        <button class="cat-tab" data-category="soups" onclick="selectCategory('soups', this)">🍜 Soups</button>
+        <button class="cat-tab" data-category="starters-veg" onclick="selectCategory('starters-veg', this)">� Starters
+          Veg</button>
+        <button class="cat-tab" data-category="starters-nonveg" onclick="selectCategory('starters-nonveg', this)">�
+          Starters Non-Veg</button>
+        <button class="cat-tab" data-category="quick-bites" onclick="selectCategory('quick-bites', this)">� Quick
+          Bites</button>
+        <button class="cat-tab" data-category="momos" onclick="selectCategory('momos', this)">🥟 Momos</button>
+        <button class="cat-tab" data-category="rice-noodles" onclick="selectCategory('rice-noodles', this)">🍚 Rice &
+          Noodles</button>
+        <button class="cat-tab" data-category="burgers" onclick="selectCategory('burgers', this)">🍔 Burgers</button>
+        <button class="cat-tab" data-category="sandwiches" onclick="selectCategory('sandwiches', this)">🥪
+          Sandwiches</button>
+        <button class="cat-tab" data-category="pasta" onclick="selectCategory('pasta', this)">� Pasta</button>
+        <button class="cat-tab" data-category="pizzas" onclick="selectCategory('pizzas', this)">� Pizzas</button>
+      </div>
+
+      <!-- Split Panel: Menu Grid + Cart -->
+      <div class="billing-split-panel">
+        <!-- Left: Menu Grid -->
+        <div class="menu-grid-container">
+          <div class="menu-grid" id="menuGrid">
+            <!-- Items populated by JS -->
+          </div>
+          <!-- Pizza Size Selector (hidden by default) -->
+          <div class="pizza-size-bar" id="pizzaSizeBar" style="display: none;">
+            <span>Select Size:</span>
+            <button class="size-btn active" data-size="8" onclick="selectPizzaSize(8, this)">8" (Regular)</button>
+            <button class="size-btn" data-size="10" onclick="selectPizzaSize(10, this)">10" (Large)</button>
+          </div>
+        </div>
+
+        <!-- Right: Cart Panel -->
+        <div class="cart-panel">
+          <div class="cart-header">
+            <h3>🛒 <span id="cartTableLabel">Table 1</span></h3>
+            <button class="clear-cart-btn" onclick="clearCart()" title="Clear All">✕ Clear</button>
+          </div>
+          <div class="cart-items" id="cartItems">
+            <div class="cart-empty">No items yet</div>
+          </div>
+          <div class="cart-footer">
+            <div class="cart-subtotal">
+              <span>Subtotal</span>
+              <span id="cartSubtotal">₹0.00</span>
+            </div>
+            <button type="button" class="generate-bill-btn" id="generateBtn" onclick="generateBill()">
+              Generate Bill
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden elements for compatibility -->
+      <div style="display:none;">
+        <select id="categorySelect">
+          <option value="">Select</option>
+        </select>
+        <select id="itemSelect">
+          <option value="">Select</option>
+        </select>
+        <div id="sizeSelectDiv"><select id="sizeSelect">
+            <option value="8">8"</option>
+            <option value="10">10"</option>
+          </select></div>
+        <input type="number" id="cartQty" value="1" min="1">
+        <div id="cartSection">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="cartTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="invoiceDiv" class="invoice" style="display: none;">
+        <!-- Header -->
+        <div class="receipt-header">
+          <div class="banner">ARENA 53</div>
+          <div class="store-name">Go Karting, Arcade Games, Café</div>
+          <div class="store-address">Sy #53, Honnenahalli, Yelahanka Hobli</div>
+          <div class="store-address">Doddaballapur Rd, Bengaluru - 560064</div>
+          <div class="gst-phone">Bill No: <span id="invNum">INV-2025-001</span> Ph: +91-7022565353</div>
+          <div class="gst-phone">GSTIN: 29ACGFA4416Q1ZX</div>
+        </div>
+
+        <!-- Bill Details -->
+        <div class="bill-details">
+          <div class="detail-line">
+            <span class="label">Date:</span>
+            <span class="value"><span id="invDate">13-11-2025</span></span>
+          </div>
+          <div class="detail-line">
+            <span class="label">Time:</span>
+            <span class="value"><span id="invTime">10:20</span></span>
+          </div>
+          <div class="detail-line">
+            <span class="label">Customer:</span>
+            <span class="value"><span id="invCustomer">Customer Name</span></span>
+          </div>
+          <div class="detail-line">
+            <span class="label">Payment Mode:</span>
+            <span class="value"><span id="paymentMethod">Cash</span></span>
+          </div>
+        </div>
+
+        <hr class="separator">
+
+        <!-- Items List -->
+        <div class="items-list" id="itemsList">
+          <!-- Static Header Row -->
+          <div class="items-header">
+            <span class="item-name">Items</span>
+            <span class="item-qty">Qty</span>
+            <span class="item-rate">Rate</span>
+            <span class="item-amount">Amount</span>
+          </div>
+          <hr class="items-separator">
+          <!-- Populated by JS -->
+        </div>
+
+        <hr class="separator">
+
+        <!-- Totals -->
+        <div class="totals-section">
+          <div class="total-line">
+            <span class="label">Subtotal</span>
+            <span class="dots"></span>
+            <span class="amount" id="subtotal">₹0.00</span>
+          </div>
+          <div id="gstRows" class="gst-lines">
+            <!-- Populated by JS -->
+          </div>
+          <div class="total-line total-row">
+            <span class="label">Total</span>
+            <span class="dots"></span>
+            <span class="amount" id="grandTotal">₹0.00</span>
+          </div>
+        </div>
+
+        <hr class="separator">
+
+        <!-- Footer -->
+        <div class="receipt-footer">
+          <div class="thank-you">Thank you for visiting Arena 53!</div>
+          <div class="contact">Enjoy the ride!</div>
+        </div>
+      </div>
+
+      <div class="print-section">
+        <button class="print-btn" onclick="printBill()" style="display: none;" id="printButton">Print Bill</button>
+      </div>
+    </div>
+
+    <!-- Owner Dashboard Tab -->
+    <div id="owner" class="tab-content">
+      <!-- Password Overlay (Fixed: Error hidden initially) -->
+      <div id="passwordOverlay" class="password-overlay">
+        <div class="password-form">
+          <h3>Enter Owner Password</h3>
+          <input type="password" id="ownerPasswordInput" placeholder="Password" autofocus>
+          <button onclick="verifyPassword()">Enter</button>
+          <div id="passwordError" class="error-msg" style="display: none;">Incorrect password. Try again.</div>
+        </div>
+      </div>
+
+      <!-- Export & Sync Buttons -->
+      <button id="loadFromSheetsBtn" onclick="loadFromSheets(this)" style="display: none;">📥 Load from Sheets</button>
+      <button id="exportAllBtn" onclick="exportAllReports()" style="display: none;">Export All Reports (CSVs)</button>
+      <button id="exportSalesBtn" onclick="exportSalesCSV()" style="display: none;">Export Sales CSV</button>
+
+      <!-- Dashboard Content -->
+      <div id="dashboardContent" style="display: none;">
+
+        <!-- Quick Stats Cards -->
+        <div class="quick-stats" id="quickStats">
+          <div class="stat-card stat-today">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+              <div class="stat-label">Today's Sales</div>
+              <div class="stat-value" id="statTodaySales">₹0</div>
+            </div>
+          </div>
+          <div class="stat-card stat-orders">
+            <div class="stat-icon">📦</div>
+            <div class="stat-info">
+              <div class="stat-label">Today's Orders</div>
+              <div class="stat-value" id="statTodayOrders">0</div>
+            </div>
+          </div>
+          <div class="stat-card stat-avg">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+              <div class="stat-label">Avg Order Value</div>
+              <div class="stat-value" id="statAvgOrder">₹0</div>
+            </div>
+          </div>
+          <div class="stat-card stat-total">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-info">
+              <div class="stat-label">All-Time Revenue</div>
+              <div class="stat-value" id="statTotalRevenue">₹0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Owner Dashboard - Sales Analytics</h3>
+
+          <!-- Date Presets -->
+          <div class="date-presets">
+            <button class="preset-btn" onclick="setDatePreset('today')">Today</button>
+            <button class="preset-btn" onclick="setDatePreset('yesterday')">Yesterday</button>
+            <button class="preset-btn" onclick="setDatePreset('week')">This Week</button>
+            <button class="preset-btn" onclick="setDatePreset('month')">This Month</button>
+            <button class="preset-btn" onclick="setDatePreset('all')">All Time</button>
+          </div>
+
+          <div class="filter-row">
+            <div class="filter-field">
+              <label for="startDate">Start Date:</label>
+              <input type="date" id="startDate">
+            </div>
+            <div class="filter-field">
+              <label for="endDate">End Date:</label>
+              <input type="date" id="endDate">
+            </div>
+            <div class="filter-field">
+              <label for="filterCategory">Category:</label>
+              <select id="filterCategory">
+                <option value="">All Categories</option>
+                <option value="laps">🏎️ Laps</option>
+                <option value="mojitos">🍹 Mojitos</option>
+                <option value="cold-coffee">☕ Cold Coffee</option>
+                <option value="smoothies">🥤 Smoothies</option>
+                <option value="fresh-juice">🍊 Fresh Juice</option>
+                <option value="ice-creams">🍨 Ice Creams</option>
+                <option value="barista">☕ Barista</option>
+                <option value="tea">🍵 Tea</option>
+                <option value="desserts">🧁 Desserts</option>
+                <option value="soups">🍜 Soups</option>
+                <option value="starters-veg">🥗 Starters Veg</option>
+                <option value="starters-nonveg">🍗 Starters Non-Veg</option>
+                <option value="quick-bites">🍟 Quick Bites</option>
+                <option value="momos">🥟 Momos</option>
+                <option value="rice-noodles">🍚 Rice & Noodles</option>
+                <option value="burgers">🍔 Burgers</option>
+                <option value="sandwiches">🥪 Sandwiches</option>
+                <option value="pasta">🍝 Pasta</option>
+                <option value="pizzas">🍕 Pizzas</option>
+              </select>
+            </div>
+            <button class="generate-btn" id="loadDashboardBtn" onclick="loadDashboard()">Load Data</button>
+          </div>
+        </div>
+
+        <div id="dashboardMetrics" class="dashboard-metrics"></div>
+
+        <div class="section">
+          <h3>Category Breakdown (Overall)</h3>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Items Sold</th>
+                <th>Revenue (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="categoryTable"></tbody>
+          </table>
+        </div>
+
+        <div class="section top-products">
+          <h3>Top Products by Category</h3>
+          <div id="topProductsDiv"></div>
+        </div>
+
+        <div class="section">
+          <h3>All Sales History</h3>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Customer</th>
+                <th>Items by Category</th>
+                <th>Grand Total (₹)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="salesTable"></tbody>
+          </table>
+        </div>
+
+        <!-- Expense Management Section -->
+        <div class="section">
+          <h3>Expense Management</h3>
+          <div class="expense-input">
+            <label for="expenseDate">Expense Date:</label>
+            <input type="date" id="expenseDate" value="2025-11-13">
+            <label for="expenseName">Expense Name (e.g., Grocery):</label>
+            <input type="text" id="expenseName" placeholder="Enter expense name">
+            <label for="expenseAmount">Amount (₹):</label>
+            <input type="number" id="expenseAmount" min="0" step="0.01" placeholder="0.00">
+            <button class="generate-btn" id="addExpenseBtn" onclick="saveExpense()">Add Expense</button>
+            <button class="generate-btn" id="cancelEditBtn" onclick="cancelEdit()" style="display: none;">Cancel
+              Edit</button>
+          </div>
+          <button class="generate-btn" id="loadAllExpensesBtn" onclick="loadAllExpenses()">Load All Expenses</button>
+          <button class="generate-btn" id="exportExpensesBtn" onclick="exportExpensesCSV()">Export Expenses to
+            CSV</button>
+          <div id="expenseTotal" class="subtotal-preview" style="display: none;">Total Expenses: ₹0.00</div>
+          <table class="dashboard-table" id="expensesTable" style="display: none;">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Expense Name</th>
+                <th>Amount (₹)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="expensesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
