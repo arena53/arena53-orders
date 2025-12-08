@@ -3,111 +3,334 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena 53 - Kitchen Display</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kitchen Display - Arena 53</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            background: #111;
-            color: white;
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: #fff;
         }
 
-        h1 {
-            text-align: center;
-            color: #ff9800;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #ff6b35, #f7c41c);
+            padding: 20px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(255, 107, 53, 0.3);
         }
 
-        .ticket-grid {
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .order-count {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #000;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Order Grid */
+        .order-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
         }
 
+        /* Order Ticket */
         .ticket {
-            background: #222;
-            border: 2px solid #444;
-            border-radius: 10px;
-            padding: 15px;
-            animation: popIn 0.3s ease;
+            background: linear-gradient(145deg, #1e1e1e, #252525);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease;
+            border: 1px solid #333;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .ticket.new {
-            border-color: #00e676;
-            box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
+            border: 2px solid #00e676;
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.3);
         }
 
+        .ticket.new::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00e676, #69f0ae);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Ticket Header */
         .ticket-header {
+            background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
+            padding: 20px 24px;
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px dashed #666;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 1.2rem;
+            align-items: center;
         }
 
-        .table-num {
-            color: #ff9800;
-            font-size: 1.5rem;
+        .table-badge {
+            background: linear-gradient(135deg, #ff6b35, #f7c41c);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
         }
 
-        .time {
+        .order-time {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .time-label {
+            font-size: 0.75rem;
             color: #888;
-            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .items-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 15px 0;
-        }
-
-        .items-list li {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            border-bottom: 1px solid #333;
-            font-size: 1.1rem;
-        }
-
-        .qty {
+        .time-value {
+            font-size: 1.2rem;
+            font-weight: 700;
             color: #00e676;
-            font-weight: bold;
-            margin-right: 10px;
+        }
+
+        /* Items List */
+        .items-container {
+            padding: 20px 24px;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .item-row:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .item-qty {
+            background: linear-gradient(135deg, #00e676, #69f0ae);
+            color: #000;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .item-name {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Action Button */
+        .action-container {
+            padding: 20px 24px;
+            padding-top: 0;
         }
 
         .done-btn {
             width: 100%;
-            padding: 15px;
-            background: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
+            padding: 18px;
+            background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
+            border: 2px solid #444;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
             cursor: pointer;
+            transition: all 0.3s ease;
             text-transform: uppercase;
-            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .done-btn:hover {
-            background: #00e676;
-            color: black;
+            background: linear-gradient(135deg, #00c853, #00e676);
+            border-color: transparent;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
         }
 
-        @keyframes popIn {
-            from {
-                transform: scale(0.9);
-                opacity: 0;
+        .done-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 100px 40px;
+            color: #666;
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .empty-subtitle {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* Audio Notice */
+        .audio-notice {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: #888;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .audio-notice:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .audio-notice.show {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
             }
 
-            to {
-                transform: scale(1);
-                opacity: 1;
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .order-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .table-badge {
+                padding: 10px 18px;
+                font-size: 1.1rem;
+            }
+
+            .item-row {
+                padding: 14px;
+            }
+
+            .item-qty {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+
+            .item-name {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
             }
         }
     </style>
@@ -115,8 +338,26 @@
 
 <body>
 
-    <h1>👨‍🍳 Kitchen Orders</h1>
-    <div id="orders-container" class="ticket-grid"></div>
+    <header class="header">
+        <div class="header-content">
+            <h1>👨‍🍳 Kitchen Display</h1>
+            <div class="order-count" id="orderCount">0 Active Orders</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="orders-container" class="order-grid">
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🍳</div>
+                <div class="empty-title">No Active Orders</div>
+                <div class="empty-subtitle">New orders will appear here automatically</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="audio-notice" id="audioNotice" onclick="enableAudio()">
+        🔊 Tap to enable order sounds
+    </div>
 
     <audio id="dingSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
@@ -124,7 +365,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
-        // --- PASTE YOUR FIREBASE CONFIG HERE ---
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyBnCmtp1s9PeEqOO3fW6n-mzrqCMFZk9to",
             authDomain: "arena53-pos.firebaseapp.com",
@@ -134,61 +375,144 @@
             messagingSenderId: "291743234318",
             appId: "1:291743234318:web:510b893fc6b8a64a703f5f"
         };
-        // ---------------------------------------
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         const container = document.getElementById('orders-container');
         const ding = document.getElementById('dingSound');
+        const emptyState = document.getElementById('emptyState');
+        const orderCountEl = document.getElementById('orderCount');
+        const audioNotice = document.getElementById('audioNotice');
+
+        let orderCount = 0;
+        let audioEnabled = false;
+
+        // Check if audio needs to be enabled
+        function enableAudio() {
+            ding.play().then(() => {
+                audioEnabled = true;
+                audioNotice.classList.remove('show');
+            }).catch(e => console.log('Audio still blocked'));
+        }
+
+        // Show audio notice on first load
+        setTimeout(() => {
+            if (!audioEnabled) {
+                audioNotice.classList.add('show');
+            }
+        }, 1000);
+
+        function updateOrderCount() {
+            orderCountEl.textContent = `${orderCount} Active Order${orderCount !== 1 ? 's' : ''}`;
+
+            if (orderCount === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+        }
 
         // Listen for NEW orders
         db.ref('orders').orderByChild('status').equalTo('pending').on('child_added', (snapshot) => {
             const order = snapshot.val();
             const key = snapshot.key;
             createTicket(key, order);
-            ding.play().catch(e => console.log("Click page to enable audio"));
+            orderCount++;
+            updateOrderCount();
+
+            // Play sound
+            ding.play().then(() => {
+                audioEnabled = true;
+                audioNotice.classList.remove('show');
+            }).catch(e => {
+                console.log("Click page to enable audio");
+                audioNotice.classList.add('show');
+            });
         });
 
         // Handle Removed/Completed orders
         db.ref('orders').on('child_removed', (snapshot) => {
             const el = document.getElementById(snapshot.key);
-            if (el) el.remove();
+            if (el) {
+                el.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => {
+                    el.remove();
+                    orderCount--;
+                    updateOrderCount();
+                }, 300);
+            }
         });
 
         db.ref('orders').on('child_changed', (snapshot) => {
-            // If status changed to completed, remove it
             if (snapshot.val().status === 'completed') {
                 const el = document.getElementById(snapshot.key);
-                if (el) el.remove();
+                if (el) {
+                    el.style.animation = 'slideOut 0.3s ease forwards';
+                    setTimeout(() => {
+                        el.remove();
+                        orderCount--;
+                        updateOrderCount();
+                    }, 300);
+                }
             }
         });
 
         function createTicket(key, order) {
+            emptyState.style.display = 'none';
+
             const div = document.createElement('div');
             div.className = 'ticket new';
             div.id = key;
 
-            let itemsHtml = '';
-            order.items.forEach(item => {
-                itemsHtml += `<li><span class="name">${item.name}</span><span class="qty">x${item.qty}</span></li>`;
-            });
+            let itemsHtml = order.items.map(item => `
+                <div class="item-row">
+                    <span class="item-qty">${item.qty}</span>
+                    <span class="item-name">${item.name}</span>
+                </div>
+            `).join('');
 
             div.innerHTML = `
                 <div class="ticket-header">
-                    <span class="table-num">Table ${order.table}</span>
-                    <span class="time">${order.time}</span>
+                    <div class="table-badge">Table ${order.table}</div>
+                    <div class="order-time">
+                        <span class="time-label">Order Time</span>
+                        <span class="time-value">${order.time}</span>
+                    </div>
                 </div>
-                <ul class="items-list">${itemsHtml}</ul>
-                <button class="done-btn" onclick="markDone('${key}')">Mark Ready ✅</button>
+                <div class="items-container">${itemsHtml}</div>
+                <div class="action-container">
+                    <button class="done-btn" onclick="markDone('${key}')">
+                        <span>✓</span> Mark Ready
+                    </button>
+                </div>
             `;
-            container.prepend(div); // Newest first
+            container.prepend(div);
+
+            // Remove 'new' class after animation
+            setTimeout(() => {
+                div.classList.remove('new');
+            }, 3000);
         }
 
         function markDone(key) {
-            // Update status in Firebase
             db.ref('orders/' + key).update({ status: 'completed' });
         }
+
+        // Add slideOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                to {
+                    opacity: 0;
+                    transform: translateY(-30px) scale(0.9);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initial count update
+        updateOrderCount();
     </script>
 </body>
 
