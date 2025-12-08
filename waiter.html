@@ -3,119 +3,500 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waiter App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Waiter App - Arena 53</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: #f4f6f8;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff9a56, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 480px;
             margin: 0 auto;
+            padding: 20px;
         }
 
-        select,
-        input,
-        button {
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        /* Table Selector */
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .table-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            padding: 16px 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .table-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .table-btn.active {
+            background: linear-gradient(135deg, #ff9a56, #ff6b6b);
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Category Pills */
+        .category-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 4px 0 10px 0;
+            margin: -4px 0;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-pill {
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-pill:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .category-pill.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Item Grid */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .item-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .item-card.selected {
+            background: rgba(0, 230, 118, 0.15);
+            border-color: #00e676;
+        }
+
+        .item-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        /* Quantity Selector */
+        .qty-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .qty-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .qty-btn:active {
+            transform: scale(0.95);
+        }
+
+        .qty-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* Add Button */
+        .add-btn {
             width: 100%;
-            padding: 12px;
+            padding: 16px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #00c853, #00e676);
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
+        }
+
+        .add-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Cart Section */
+        .cart-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 20px;
+            margin-bottom: 100px;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
+        }
+
+        .cart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .cart-count {
+            background: linear-gradient(135deg, #ff9a56, #ff6b6b);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.95rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .cart-item-qty {
+            background: rgba(0, 230, 118, 0.2);
+            color: #00e676;
+            padding: 6px 12px;
             border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-            box-sizing: border-box;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .cart-item-remove {
+            background: rgba(255, 82, 82, 0.2);
+            color: #ff5252;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item-remove:hover {
+            background: rgba(255, 82, 82, 0.4);
+        }
+
+        /* Floating Send Button */
+        .send-btn-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px 25px;
+            background: linear-gradient(transparent, rgba(26, 26, 46, 0.95) 20%);
         }
 
         .send-btn {
-            background: #007bff;
-            color: white;
-            font-weight: bold;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            display: block;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
         }
 
         .send-btn:hover {
-            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
         }
 
-        h2 {
-            text-align: center;
-            margin-top: 0;
+        .send-btn:active {
+            transform: translateY(0);
         }
 
-        .cart-preview {
-            background: #eee;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            min-height: 50px;
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .item-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
+        /* Success Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #00c853, #00e676);
+            color: #000;
+            padding: 16px 30px;
+            border-radius: 14px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 200, 83, 0.4);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .table-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="card">
-        <h2>📱 Take Order</h2>
+    <header class="header">
+        <h1>🍽️ Arena 53 Waiter</h1>
+        <p class="header-subtitle">Take orders quickly & efficiently</p>
+    </header>
 
-        <label>Table Number:</label>
-        <select id="tableSelect">
-            <option value="1">Table 1</option>
-            <option value="2">Table 2</option>
-            <option value="3">Table 3</option>
-            <option value="4">Table 4</option>
-            <option value="5">Table 5</option>
-            <option value="6">Table 6</option>
-        </select>
+    <div class="container">
+        <!-- Table Selection -->
+        <div class="glass-card">
+            <div class="section-title">Select Table</div>
+            <div class="table-grid" id="tableGrid">
+                <button class="table-btn active" data-table="1">Table 1</button>
+                <button class="table-btn" data-table="2">Table 2</button>
+                <button class="table-btn" data-table="3">Table 3</button>
+                <button class="table-btn" data-table="4">Table 4</button>
+                <button class="table-btn" data-table="5">Table 5</button>
+                <button class="table-btn" data-table="6">Table 6</button>
+            </div>
+        </div>
 
-        <label>Category:</label>
-        <select id="categorySelect" onchange="loadItems()">
-            <option value="">Select Category</option>
-            <option value="laps">Go-Kart Laps</option>
-            <option value="starters-veg">Starters Veg</option>
-            <option value="burgers">Burgers</option>
-            <option value="pizzas">Pizzas</option>
-            <option value="mojitos">Mojitos</option>
-        </select>
+        <!-- Category Selection -->
+        <div class="glass-card">
+            <div class="section-title">Category</div>
+            <div class="category-scroll" id="categoryScroll">
+                <button class="category-pill" data-category="laps">🏎️ Go-Kart</button>
+                <button class="category-pill" data-category="starters-veg">🥗 Starters</button>
+                <button class="category-pill" data-category="burgers">🍔 Burgers</button>
+                <button class="category-pill" data-category="pizzas">🍕 Pizzas</button>
+                <button class="category-pill" data-category="mojitos">🍹 Mojitos</button>
+            </div>
 
-        <label>Item:</label>
-        <select id="itemSelect">
-            <option value="">Select Category First</option>
-        </select>
+            <div id="itemsContainer" class="item-grid">
+                <p style="grid-column: 1/-1; text-align: center; color: rgba(255,255,255,0.4);">
+                    Select a category above
+                </p>
+            </div>
+        </div>
 
-        <label>Qty:</label>
-        <input type="number" id="qty" value="1" min="1">
+        <!-- Quantity Section -->
+        <div class="glass-card" id="qtySection" style="display: none;">
+            <div class="section-title" style="text-align: center;">Quantity</div>
+            <div id="selectedItemName" style="text-align: center; font-weight: 600; margin-bottom: 10px;"></div>
+            <div class="qty-section">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <span class="qty-display" id="qtyDisplay">1</span>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+            <button class="add-btn" onclick="addToCart()">✓ Add to Order</button>
+        </div>
 
-        <button onclick="addToCart()" style="background: #28a745; color: white;">+ Add Item</button>
-
-        <h3>Order Summary:</h3>
-        <div id="cartDisplay" class="cart-preview">No items</div>
-
-        <button class="send-btn" onclick="sendToKitchen()">🚀 Send to Kitchen</button>
+        <!-- Cart Section -->
+        <div class="cart-section">
+            <div class="cart-header">
+                <span class="cart-title">🛒 Order Summary</span>
+                <span class="cart-count" id="cartCount">0 items</span>
+            </div>
+            <div id="cartDisplay">
+                <div class="cart-empty">No items added yet</div>
+            </div>
+        </div>
     </div>
+
+    <!-- Floating Send Button -->
+    <div class="send-btn-container">
+        <button class="send-btn" onclick="sendToKitchen()" id="sendBtn">
+            🚀 Send to Kitchen
+        </button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Order Sent! 👨‍🍳</div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
-        // --- PASTE YOUR FIREBASE CONFIG HERE (SAME AS KITCHEN) ---
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyBnCmtp1s9PeEqOO3fW6n-mzrqCMFZk9to",
             authDomain: "arena53-pos.firebaseapp.com",
@@ -125,71 +506,146 @@
             messagingSenderId: "291743234318",
             appId: "1:291743234318:web:510b893fc6b8a64a703f5f"
         };
-        // ---------------------------------------------------------
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        // State
+        let selectedTable = '1';
+        let selectedCategory = '';
+        let selectedItem = '';
+        let quantity = 1;
         let cart = [];
 
-        // Simple Menu Data (Copy full menu from script.js)
+        // Menu Data
         const menu = {
-            "laps": ["8 laps", "12 laps", "16 laps"],
+            "laps": ["8 Laps", "12 Laps", "16 Laps"],
             "starters-veg": ["Mushroom Chilly", "Paneer Manchurian", "Baby Corn"],
             "burgers": ["Veg BBQ Burger", "Chicken BBQ Burger"],
             "pizzas": ["Margherita", "Corn Pizza", "Chicken Tikka"],
             "mojitos": ["Lemon Mojito", "Green Apple", "Virgin Mojito"]
         };
 
+        // Table Selection
+        document.getElementById('tableGrid').addEventListener('click', (e) => {
+            if (e.target.classList.contains('table-btn')) {
+                document.querySelectorAll('.table-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedTable = e.target.dataset.table;
+            }
+        });
+
+        // Category Selection
+        document.getElementById('categoryScroll').addEventListener('click', (e) => {
+            if (e.target.classList.contains('category-pill')) {
+                document.querySelectorAll('.category-pill').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedCategory = e.target.dataset.category;
+                loadItems();
+            }
+        });
+
         function loadItems() {
-            const cat = document.getElementById('categorySelect').value;
-            const itemSel = document.getElementById('itemSelect');
-            itemSel.innerHTML = '';
-            if (menu[cat]) {
-                menu[cat].forEach(item => {
-                    const opt = document.createElement('option');
-                    opt.value = item;
-                    opt.textContent = item;
-                    itemSel.appendChild(opt);
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            if (menu[selectedCategory]) {
+                menu[selectedCategory].forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = `<div class="item-name">${item}</div>`;
+                    card.onclick = () => selectItem(item, card);
+                    container.appendChild(card);
                 });
             }
         }
 
-        function addToCart() {
-            const item = document.getElementById('itemSelect').value;
-            const qty = document.getElementById('qty').value;
-            if (!item) return alert("Select an item");
+        function selectItem(item, element) {
+            document.querySelectorAll('.item-card').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedItem = item;
+            quantity = 1;
+            document.getElementById('qtyDisplay').textContent = quantity;
+            document.getElementById('selectedItemName').textContent = item;
+            document.getElementById('qtySection').style.display = 'block';
+        }
 
-            cart.push({ name: item, qty: qty });
+        function changeQty(delta) {
+            quantity = Math.max(1, quantity + delta);
+            document.getElementById('qtyDisplay').textContent = quantity;
+        }
+
+        function addToCart() {
+            if (!selectedItem) return;
+
+            // Check if item exists in cart
+            const existingIndex = cart.findIndex(c => c.name === selectedItem);
+            if (existingIndex >= 0) {
+                cart[existingIndex].qty = parseInt(cart[existingIndex].qty) + quantity;
+            } else {
+                cart.push({ name: selectedItem, qty: quantity });
+            }
+
             renderCart();
+
+            // Reset selection
+            document.querySelectorAll('.item-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById('qtySection').style.display = 'none';
+            selectedItem = '';
+            quantity = 1;
         }
 
         function renderCart() {
-            const div = document.getElementById('cartDisplay');
-            if (cart.length === 0) { div.innerHTML = 'No items'; return; }
-            let html = '';
-            cart.forEach(c => {
-                html += `<div class="item-row"><span>${c.name}</span><span>x${c.qty}</span></div>`;
-            });
-            div.innerHTML = html;
+            const container = document.getElementById('cartDisplay');
+            const countEl = document.getElementById('cartCount');
+
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="cart-empty">No items added yet</div>';
+                countEl.textContent = '0 items';
+                return;
+            }
+
+            countEl.textContent = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
+
+            container.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <span class="cart-item-name">${item.name}</span>
+                    <span class="cart-item-qty">×${item.qty}</span>
+                    <button class="cart-item-remove" onclick="removeFromCart(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         function sendToKitchen() {
-            if (cart.length === 0) return alert("Cart is empty");
-            const table = document.getElementById('tableSelect').value;
+            if (cart.length === 0) {
+                showToast('⚠️ Cart is empty!');
+                return;
+            }
 
             const orderData = {
-                table: table,
+                table: selectedTable,
                 items: cart,
                 status: 'pending',
                 time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
             };
 
-            // Push to Firebase
             db.ref('orders').push(orderData, (error) => {
                 if (error) {
-                    alert('Error saving data: ' + error.message);
+                    showToast('❌ Error: ' + error.message);
                 } else {
-                    alert('Order Sent to Kitchen! 👨‍🍳');
+                    showToast('✅ Order Sent to Kitchen!');
                     cart = [];
                     renderCart();
                 }
